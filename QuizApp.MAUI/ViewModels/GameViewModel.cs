@@ -45,6 +45,8 @@ namespace QuizApp.MAUI.ViewModels
         [ObservableProperty]
         private int score;
 
+        private bool _isLoadingQuestions = false;
+
         // Query Properties with custom logic in set
         private string _category = string.Empty;
         public string Category
@@ -112,11 +114,17 @@ namespace QuizApp.MAUI.ViewModels
         [RelayCommand]
         private async Task LoadQuestions()
         {
+            if (_isLoadingQuestions) return; // Stop more than one request at a time
+            _isLoadingQuestions = true;
             try
             {
+                ResetGameState(); // Reset the game state
+
                 Console.WriteLine($"Loading questions with Category: {Category}, Amount: {Amount}, Difficulty: {Difficulty}, Type: {Type}");
+
                 // Get DTOs from the service
                 var questionDtos = await _triviaApiService.GetQuestionsAsync(Amount, Category, Difficulty, Type);
+
 
                 // Map DTOs to models
                 Questions = questionDtos.Select(dto => new Question
@@ -138,6 +146,10 @@ namespace QuizApp.MAUI.ViewModels
             catch (Exception ex)
             {
                 await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
+            }
+            finally
+            {
+                _isLoadingQuestions = false;
             }
 
 
@@ -205,6 +217,7 @@ namespace QuizApp.MAUI.ViewModels
             {
                 CurrentQuestionIndex++;
                 LoadCurrentQuestion();
+                isAnswerSelected = false; // Reset answer state
             }
             else
             {
@@ -212,6 +225,7 @@ namespace QuizApp.MAUI.ViewModels
                 string serializedResults = Uri.EscapeDataString(JsonConvert.SerializeObject(Results));
 
                 string resultsPageUri = $"///ResultsPage?score={Score}&total={Questions.Count}&results={serializedResults}";
+                ResetGameState();
                 // Navigate to ResultsPage
                 Console.WriteLine($"Navigating to ResultsPage with Score={Score} and TotalQuestions={Questions.Count}, and Results");
                 Shell.Current.GoToAsync(resultsPageUri);
@@ -252,6 +266,17 @@ namespace QuizApp.MAUI.ViewModels
             IsAnswerSubmitted = false;
             CurrentQuestionIndex = 0;
             Score = 0;
+        }
+
+        public void ResetGameState()
+        {
+            Questions.Clear();
+            Results.Clear();
+            CurrentQuestionIndex = 0;
+            Score = 0;
+            SelectedAnswer = string.Empty;
+            CurrentQuestion = null;
+            IsAnswerSubmitted = false;
         }
     }
 }

@@ -121,6 +121,23 @@ namespace QuizApp.Core
             return sessionTokenResponse.Token;
         }
 
+        private async Task<string> RetryOnRateLimitAsync(Func<Task<string>> apiCall, int maxRetries = 3, int delayMilliseconds = 2000)
+        {
+            int retries = 0;
+            while (retries < maxRetries)
+            {
+                try
+                {
+                    return await apiCall();
+                }
+                catch (Exception ex) when (ex.Message.Contains("Too many requests"))
+                {
+                    retries++;
+                    await Task.Delay(delayMilliseconds);
+                }
+            }
+            throw new Exception("Too many requests, even after retries.");
+        }
 
 
 

@@ -121,6 +121,11 @@ namespace QuizApp.MAUI.ViewModels
                 return;
             }
 
+            // Get the game view model and reset the game state
+            var gameViewModel = Shell.Current.BindingContext as GameViewModel;
+            gameViewModel?.ResetGameState();
+
+
             // Get the category ID based on the selected category
             var categoryId = _validCombinations.First(c => c.CategoryName == SelectedCategory).CategoryId;
 
