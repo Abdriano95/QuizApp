@@ -28,7 +28,7 @@ namespace QuizApp.MAUI.ViewModels
         {
             await LoadResults();
         }
-        private async Task  LoadResults()
+        public async Task  LoadResults()
         {
             Console.WriteLine("Loading highscores...");
             var results = await _highScoreResultService.GetResultsAsync();
