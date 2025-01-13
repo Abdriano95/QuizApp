@@ -1,20 +1,53 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="QuizApp.MAUI.Views.ResultsPage"
-             Title="ResultsPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+             xmlns:vm="clr-namespace:QuizApp.MAUI.ViewModels"
+             x:Class="QuizApp.MAUI.Views.ResultsPage">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20" HorizontalOptions="Center">
+            <!-- Result Title -->
+            <Label Text="Game Results"
+                   FontSize="32"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
 
-        <Button Text="Play Again"
-                Command="{Binding PlayAgainCommand}"
-                BackgroundColor="#4CAF50"
-                TextColor="White"
-                CornerRadius="10"
-                HorizontalOptions="Center"
-                WidthRequest="200" />
-    </VerticalStackLayout>
+            <!-- Display Score -->
+            <Label Text="{Binding ScoreText}"
+                   FontSize="24"
+                   HorizontalOptions="Center" />
+
+            <!-- Show Correct and Incorrect Answers -->
+            <CollectionView ItemsSource="{Binding Results}" HeightRequest="400">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="10" Margin="5" BackgroundColor="{Binding IsCorrect, Converter={StaticResource CorrectAnswerConverter}}" CornerRadius="10">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding Question}" FontSize="18" FontAttributes="Bold" />
+                                <Label Text="{Binding YourAnswer}" FontSize="16" TextColor="Gray" />
+                                <Label Text="{Binding CorrectAnswer}" FontSize="16" TextColor="Green" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Play Again Button -->
+            <Button Text="Play Again"
+                    Command="{Binding PlayAgainCommand}"
+                    BackgroundColor="#4CAF50"
+                    TextColor="White"
+                    CornerRadius="10"
+                    WidthRequest="200"
+                    HorizontalOptions="Center" />
+
+            <!-- Quit Game Button -->
+            <Button Text="Quit Game"
+                    Command="{Binding QuitGameCommand}"
+                    BackgroundColor="Red"
+                    TextColor="White"
+                    CornerRadius="10"
+                    WidthRequest="200"
+                    HorizontalOptions="Center" />
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

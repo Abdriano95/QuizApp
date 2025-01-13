@@ -12,8 +12,9 @@
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <!-- Register SelectedAnswerConverter -->
+            <!-- Register Converters -->
             <converters:SelectedAnswerConverter x:Key="SelectedAnswerConverter" />
+            <converters:CorrectAnswerConverter x:Key="CorrectAnswerConverter" />
 
         </ResourceDictionary>
     </Application.Resources>

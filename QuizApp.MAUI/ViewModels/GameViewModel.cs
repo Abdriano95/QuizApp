@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Newtonsoft.Json;
 using QuizApp.Core;
 using QuizApp.MAUI.Models;
 using System.Collections.ObjectModel;
@@ -25,6 +26,9 @@ namespace QuizApp.MAUI.ViewModels
 
         [ObservableProperty]
         private ObservableCollection<string> currentQuestionAnswers = new();
+
+        [ObservableProperty]
+        private List<Result> results = new();
 
         [ObservableProperty]
         private string selectedAnswer;
@@ -136,7 +140,7 @@ namespace QuizApp.MAUI.ViewModels
                 await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
             }
 
-           
+
         }
 
         private void LoadCurrentQuestion()
@@ -158,22 +162,39 @@ namespace QuizApp.MAUI.ViewModels
         [RelayCommand]
         private void SubmitAnswer()
         {
-            if (SelectedAnswer == CurrentQuestion.CorrectAnswer)
+            if (SelectedAnswer != null)
             {
-                Score++;
+                Results.Add(new Result
+                {
+                    Question = CurrentQuestion.QuestionText,
+                    YourAnswer = SelectedAnswer,
+                    CorrectAnswer = CurrentQuestion.CorrectAnswer
+                });
+
+                if (SelectedAnswer == CurrentQuestion.CorrectAnswer)
+                {
+                    Score++;
+                    Console.WriteLine($"Correct Answer! Current Score: {Score}");
+                }
+                else
+                {
+                    Console.WriteLine($"Incorrect Answer. Current Score: {Score}");
+                }
+
+                IsAnswerSubmitted = true;
+                IsAnswerSelected = false;
+
+
+                // Wait 1 second before moving to the next question
+                Task.Delay(1000).ContinueWith(_ =>
+                {
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        NextQuestionCommand.Execute(null);
+                    });
+                });
             }
 
-            IsAnswerSubmitted = true;
-
-
-            // Wait 1 second before moving to the next question
-            Task.Delay(1000).ContinueWith(_ =>
-            {
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    NextQuestionCommand.Execute(null);
-                });
-            });
         }
 
 
@@ -187,10 +208,12 @@ namespace QuizApp.MAUI.ViewModels
             }
             else
             {
+                // Serialize the result to pass to the ResultsPage
+                string serializedResults = Uri.EscapeDataString(JsonConvert.SerializeObject(Results));
 
-
-                string resultsPageUri = $"///ResultsPage?score={Score}&total={Questions.Count}";
+                string resultsPageUri = $"///ResultsPage?score={Score}&total={Questions.Count}&results={serializedResults}";
                 // Navigate to ResultsPage
+                Console.WriteLine($"Navigating to ResultsPage with Score={Score} and TotalQuestions={Questions.Count}, and Results");
                 Shell.Current.GoToAsync(resultsPageUri);
                 ResetGame();
 
