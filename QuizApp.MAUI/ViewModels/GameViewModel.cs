@@ -158,11 +158,24 @@ namespace QuizApp.MAUI.ViewModels
             }
 
             IsAnswerSubmitted = true;
+
+            Console.WriteLine("Answer submitted successfully");
+
+            // Wait 1 second before moving to the next question
+            Task.Delay(1000).ContinueWith(_ =>
+            {
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    NextQuestionCommand.Execute(null);
+                });
+            });
         }
+
 
         [RelayCommand]
         private void NextQuestion()
         {
+            Console.WriteLine("NextQuestionCommand triggered");
             if (CurrentQuestionIndex + 1 < Questions.Count)
             {
                 CurrentQuestionIndex++;
@@ -175,22 +188,14 @@ namespace QuizApp.MAUI.ViewModels
             }
         }
 
-        // Receive navigation parameters
-        public void ApplyNavigationParameters(IDictionary<string, object> parameters)
+        [RelayCommand]
+        private void SelectAnswer(string answer)
         {
-            if (parameters.TryGetValue("Category", out var category))
-                Category = category?.ToString() ?? string.Empty;
-
-            if (parameters.TryGetValue("Amount", out var amount))
-                Amount = Convert.ToInt32(amount);
-
-            if (parameters.TryGetValue("Difficulty", out var difficulty))
-                Difficulty = difficulty?.ToString() ?? string.Empty;
-
-            if (parameters.TryGetValue("Type", out var type))
-                Type = type?.ToString() ?? string.Empty;
-
-            Console.WriteLine($"Loaded parameters - Category: {Category}, Amount: {Amount}, Difficulty: {Difficulty}, Type: {Type}");
+            Console.WriteLine($"Answer selected: {answer}");
+            SelectedAnswer = answer;
+            IsAnswerSelected = !string.IsNullOrEmpty(answer);
         }
+
+
     }
 }

@@ -8,20 +8,19 @@
         <VerticalStackLayout Padding="20">
             <Label Text="Select Category" FontSize="20" />
             <Picker ItemsSource="{Binding Categories}" 
-                    ItemDisplayBinding="{Binding Name}" 
-                    SelectedItem="{Binding SelectedCategory}" />
+            SelectedItem="{Binding SelectedCategory}" />
 
             <Label Text="Select Number of Questions" FontSize="20" />
             <Picker ItemsSource="{Binding QuestionAmounts}" 
-                    SelectedItem="{Binding SelectedAmount}" />
+            SelectedItem="{Binding SelectedAmount}" />
 
             <Label Text="Select Difficulty" FontSize="20" />
             <Picker ItemsSource="{Binding Difficulties}" 
-                    SelectedItem="{Binding SelectedDifficulty}" />
+            SelectedItem="{Binding SelectedDifficulty}" />
 
             <Label Text="Select Question Type" FontSize="20" />
             <Picker ItemsSource="{Binding Types}" 
-                    SelectedItem="{Binding SelectedType}" />
+            SelectedItem="{Binding SelectedType}" />
 
             <Button Text="Start Game" Command="{Binding StartGameCommand}" />
         </VerticalStackLayout>

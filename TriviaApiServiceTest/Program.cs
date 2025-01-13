@@ -1,57 +1,95 @@
 ﻿using QuizApp.Core;
 using System.Web;
+using System.IO;
+using System.Threading;
 
 
 namespace TriviaApiServiceTest
 {
     public class Program
     {
+        private const int DelayBetweenRequests = 1000; // 1 sec delay
         static async Task Main(string[] args)
         {
             // Instantiate the Trivia API Service
             TriviaApiService triviaApiService = new TriviaApiService();
 
-            // Test fetching categories
+            // Fetch categories
             Console.WriteLine("Fetching categories...");
             var categories = await triviaApiService.GetCategoriesAsync();
-            Console.WriteLine("Categories:");
+            Console.WriteLine("Categories fetched!");
+
+            // Define difficulty levels and question types
+            var difficulties = new[] { "easy", "medium", "hard" };
+            var types = new[] { "multiple", "boolean" };
+            var questionAmounts = new[] { 5, 10, 20 };
+
+
+
+            // Store valid combinations
+            var validCombinations = new List<string>();
+
+            Console.WriteLine("Testing all combinations...");
             foreach (var category in categories)
             {
-                Console.WriteLine($"ID: {category.Id}, Name: {category.Name}");
-            }
-
-            // Test fetching questions
-            Console.WriteLine("\nFetching questions...");
-            var questions = await triviaApiService.GetQuestionsAsync(
-                amount: 10,
-                category: "9", // General Knowledge
-                difficulty: "medium", // Medium difficulty
-                type: "multiple", // Multiple Choice
-                encoding: "url3986" // URL encoding for special characters
-            );
-
-            foreach (var question in questions)
-            {
-                Console.WriteLine($"Category: {question.Category}");
-                Console.WriteLine($"Type: {question.Type}");
-                Console.WriteLine($"Difficulty: {question.Difficulty}");
-                Console.WriteLine($"Question: {HttpUtility.UrlDecode(question.Question)}");
-                Console.WriteLine($"Correct Answer: {HttpUtility.UrlDecode(question.CorrectAnswer)}");
-                Console.WriteLine("Incorrect Answers:");
-                foreach (var answer in question.IncorrectAnswers)
+                foreach (var difficulty in difficulties)
                 {
-                    Console.WriteLine($" - {HttpUtility.UrlDecode(answer)}");
+                    foreach (var type in types)
+                    {
+                        foreach (var amount in questionAmounts)
+                        {
+                            try
+                            {
+                                Console.WriteLine($"Testing: Category={category.Name}, Amount={amount}, Difficulty={difficulty}, Type={type}");
+
+                                // Test the combination
+                                var questions = await triviaApiService.GetQuestionsAsync(
+                                    amount: amount,
+                                    category: category.Id.ToString(),
+                                    difficulty: difficulty,
+                                    type: type
+                                );
+
+                                if (questions.Count > 0)
+                                {
+                                    Console.WriteLine("Valid combination!");
+                                    validCombinations.Add($"{category.Id},{category.Name},{amount},{difficulty},{type}");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("No questions available.");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"Error testing combination: {ex.Message}");
+                            }
+
+                            // Wait before the next request to avoid hitting the rate limit
+                            Console.WriteLine("Waiting before the next request...");
+                            await Task.Delay(DelayBetweenRequests);
+                        }
+                    }
                 }
-                Console.WriteLine();
             }
 
+            Console.WriteLine("\nSaving valid combinations to file...");
+            SaveValidCombinations(validCombinations);
+            Console.WriteLine("Valid combinations saved!");
+        }
 
-            // Test session token reset
-            Console.WriteLine("\nResetting session token...");
-            await triviaApiService.ResetSessionTokenAsync();
-            Console.WriteLine("Session token reset successfully.");
-
-            Console.WriteLine("\nAll tests completed!");
+        private static void SaveValidCombinations(List<string> validCombinations)
+        {
+            string filePath = "ValidCombinations.csv";
+            using (var writer = new StreamWriter(filePath))
+            {
+                writer.WriteLine("CategoryId,CategoryName,Amount,Difficulty,Type"); // Header
+                foreach (var combination in validCombinations)
+                {
+                    writer.WriteLine(combination);
+                }
+            }
+            Console.WriteLine($"Combinations saved to {filePath}");
         }
     }
 }

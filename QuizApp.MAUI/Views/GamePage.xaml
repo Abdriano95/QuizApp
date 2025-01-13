@@ -1,36 +1,63 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:behaviors="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:vm="clr-namespace:QuizApp.MAUI.ViewModels"
              x:Class="QuizApp.MAUI.Views.GamePage"
              Title="GamePage">
-    
+
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="10">
+        <VerticalStackLayout Padding="20" Spacing="20">
             <!-- Question -->
             <Label Text="{Binding CurrentQuestion.QuestionText}" 
                    FontSize="24" 
-                   HorizontalOptions="Center" />
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   Margin="10,20,10,10" />
 
-            <CollectionView ItemsSource="{Binding CurrentQuestionAnswers}" 
-                            SelectionMode="Single" 
-                            SelectedItem="{Binding SelectedAnswer}">
+            <!-- Answer Options -->
+            <CollectionView ItemsSource="{Binding CurrentQuestionAnswers}" SelectionMode="None">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame Padding="10" Margin="5" BorderColor="Gray" CornerRadius="5">
-                            <Label Text="{Binding}" FontSize="18" />
+                        <Frame Padding="10" Margin="5" BorderColor="Gray" CornerRadius="8" BackgroundColor="White">
+                            <Frame.Triggers>
+                                <!-- Highlight the selected answer -->
+                                <DataTrigger TargetType="Frame" 
+                                             Binding="{Binding Source={RelativeSource AncestorType={x:Type vm:GameViewModel}}, Path=SelectedAnswer}" 
+                                             Value="{Binding}">
+                                    <Setter Property="BackgroundColor" Value="LightGray" />
+                                    <Setter Property="BorderColor" Value="Blue" />
+                                </DataTrigger>
+                            </Frame.Triggers>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer 
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:GameViewModel}}, Path=SelectAnswerCommand}"
+                                    CommandParameter="{Binding}" />
+                            </Frame.GestureRecognizers>
+                            <Label Text="{Binding}" FontSize="18" HorizontalTextAlignment="Center" />
                         </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
+            <!-- Submit Answer Button -->
             <Button Text="Submit Answer" 
                     Command="{Binding SubmitAnswerCommand}" 
-                    IsEnabled="{Binding IsAnswerSelected}" />
+                    IsEnabled="{Binding IsAnswerSelected}"
+                    HorizontalOptions="Center" 
+                    WidthRequest="200" 
+                    BackgroundColor="#4CAF50" 
+                    TextColor="White"
+                    CornerRadius="10" />
 
+            <!-- Next Question Button -->
             <Button Text="Next Question" 
                     Command="{Binding NextQuestionCommand}" 
-                    IsVisible="{Binding IsAnswerSubmitted}" />
+                    IsVisible="{Binding IsAnswerSubmitted}" 
+                    HorizontalOptions="Center" 
+                    WidthRequest="200" 
+                    BackgroundColor="#2196F3" 
+                    TextColor="White"
+                    CornerRadius="10" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

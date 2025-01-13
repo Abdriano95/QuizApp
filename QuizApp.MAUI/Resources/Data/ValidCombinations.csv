@@ -1,0 +1,247 @@
+CategoryId,CategoryName,Amount,Difficulty,Type
+9,General Knowledge,5,easy,multiple
+9,General Knowledge,10,easy,multiple
+9,General Knowledge,20,easy,multiple
+9,General Knowledge,5,easy,boolean
+9,General Knowledge,10,easy,boolean
+9,General Knowledge,20,easy,boolean
+9,General Knowledge,5,medium,multiple
+9,General Knowledge,10,medium,multiple
+9,General Knowledge,20,medium,multiple
+9,General Knowledge,5,medium,boolean
+9,General Knowledge,10,medium,boolean
+9,General Knowledge,20,medium,boolean
+9,General Knowledge,5,hard,multiple
+9,General Knowledge,10,hard,multiple
+9,General Knowledge,20,hard,multiple
+9,General Knowledge,5,hard,boolean
+10,Entertainment: Books,5,easy,multiple
+10,Entertainment: Books,10,easy,multiple
+10,Entertainment: Books,20,easy,multiple
+10,Entertainment: Books,5,easy,boolean
+10,Entertainment: Books,5,medium,multiple
+10,Entertainment: Books,10,medium,multiple
+10,Entertainment: Books,20,medium,multiple
+10,Entertainment: Books,5,hard,multiple
+10,Entertainment: Books,10,hard,multiple
+10,Entertainment: Books,20,hard,multiple
+11,Entertainment: Film,5,easy,multiple
+11,Entertainment: Film,10,easy,multiple
+11,Entertainment: Film,20,easy,multiple
+11,Entertainment: Film,5,easy,boolean
+11,Entertainment: Film,10,easy,boolean
+11,Entertainment: Film,20,easy,boolean
+11,Entertainment: Film,5,medium,multiple
+11,Entertainment: Film,10,medium,multiple
+11,Entertainment: Film,20,medium,multiple
+11,Entertainment: Film,5,medium,boolean
+11,Entertainment: Film,5,hard,multiple
+11,Entertainment: Film,10,hard,multiple
+11,Entertainment: Film,20,hard,multiple
+12,Entertainment: Music,5,easy,multiple
+12,Entertainment: Music,10,easy,multiple
+12,Entertainment: Music,20,easy,multiple
+12,Entertainment: Music,5,easy,boolean
+12,Entertainment: Music,10,easy,boolean
+12,Entertainment: Music,5,medium,multiple
+12,Entertainment: Music,10,medium,multiple
+12,Entertainment: Music,20,medium,multiple
+12,Entertainment: Music,5,medium,boolean
+12,Entertainment: Music,10,medium,boolean
+12,Entertainment: Music,20,medium,boolean
+12,Entertainment: Music,5,hard,multiple
+12,Entertainment: Music,10,hard,multiple
+12,Entertainment: Music,20,hard,multiple
+12,Entertainment: Music,5,hard,boolean
+13,Entertainment: Musicals & Theatres,5,easy,multiple
+13,Entertainment: Musicals & Theatres,5,medium,multiple
+13,Entertainment: Musicals & Theatres,10,medium,multiple
+13,Entertainment: Musicals & Theatres,5,hard,multiple
+14,Entertainment: Television,5,easy,multiple
+14,Entertainment: Television,10,easy,multiple
+14,Entertainment: Television,20,easy,multiple
+14,Entertainment: Television,5,easy,boolean
+14,Entertainment: Television,5,medium,multiple
+14,Entertainment: Television,10,medium,multiple
+14,Entertainment: Television,20,medium,multiple
+14,Entertainment: Television,5,medium,boolean
+14,Entertainment: Television,10,medium,boolean
+14,Entertainment: Television,5,hard,multiple
+14,Entertainment: Television,10,hard,multiple
+14,Entertainment: Television,20,hard,multiple
+15,Entertainment: Video Games,5,easy,multiple
+15,Entertainment: Video Games,10,easy,multiple
+15,Entertainment: Video Games,20,easy,multiple
+15,Entertainment: Video Games,5,easy,boolean
+15,Entertainment: Video Games,10,easy,boolean
+15,Entertainment: Video Games,20,easy,boolean
+15,Entertainment: Video Games,5,medium,multiple
+15,Entertainment: Video Games,10,medium,multiple
+15,Entertainment: Video Games,20,medium,multiple
+15,Entertainment: Video Games,5,medium,boolean
+15,Entertainment: Video Games,10,medium,boolean
+15,Entertainment: Video Games,20,medium,boolean
+15,Entertainment: Video Games,5,hard,multiple
+15,Entertainment: Video Games,10,hard,multiple
+15,Entertainment: Video Games,20,hard,multiple
+15,Entertainment: Video Games,5,hard,boolean
+15,Entertainment: Video Games,10,hard,boolean
+16,Entertainment: Board Games,5,easy,multiple
+16,Entertainment: Board Games,10,easy,multiple
+16,Entertainment: Board Games,5,easy,boolean
+16,Entertainment: Board Games,5,medium,multiple
+16,Entertainment: Board Games,10,medium,multiple
+16,Entertainment: Board Games,5,hard,multiple
+16,Entertainment: Board Games,10,hard,multiple
+16,Entertainment: Board Games,20,hard,multiple
+17,Science & Nature,5,easy,multiple
+17,Science & Nature,10,easy,multiple
+17,Science & Nature,20,easy,multiple
+17,Science & Nature,5,easy,boolean
+17,Science & Nature,10,easy,boolean
+17,Science & Nature,5,medium,multiple
+17,Science & Nature,10,medium,multiple
+17,Science & Nature,20,medium,multiple
+17,Science & Nature,5,medium,boolean
+17,Science & Nature,10,medium,boolean
+17,Science & Nature,20,medium,boolean
+17,Science & Nature,5,hard,multiple
+17,Science & Nature,10,hard,multiple
+17,Science & Nature,20,hard,multiple
+18,Science: Computers,5,easy,multiple
+18,Science: Computers,10,easy,multiple
+18,Science: Computers,20,easy,multiple
+18,Science: Computers,5,easy,boolean
+18,Science: Computers,10,easy,boolean
+18,Science: Computers,5,medium,multiple
+18,Science: Computers,10,medium,multiple
+18,Science: Computers,20,medium,multiple
+18,Science: Computers,5,medium,boolean
+18,Science: Computers,10,medium,boolean
+18,Science: Computers,5,hard,multiple
+18,Science: Computers,10,hard,multiple
+18,Science: Computers,20,hard,multiple
+19,Science: Mathematics,5,easy,multiple
+19,Science: Mathematics,5,easy,boolean
+19,Science: Mathematics,5,medium,multiple
+19,Science: Mathematics,10,medium,multiple
+19,Science: Mathematics,5,medium,boolean
+19,Science: Mathematics,5,hard,multiple
+19,Science: Mathematics,10,hard,multiple
+20,Mythology,5,easy,multiple
+20,Mythology,10,easy,multiple
+20,Mythology,5,medium,multiple
+20,Mythology,10,medium,multiple
+20,Mythology,20,medium,multiple
+20,Mythology,5,hard,multiple
+20,Mythology,10,hard,multiple
+21,Sports,5,easy,multiple
+21,Sports,10,easy,multiple
+21,Sports,20,easy,multiple
+21,Sports,5,easy,boolean
+21,Sports,5,medium,multiple
+21,Sports,10,medium,multiple
+21,Sports,20,medium,multiple
+21,Sports,5,medium,boolean
+21,Sports,5,hard,multiple
+21,Sports,10,hard,multiple
+21,Sports,20,hard,multiple
+22,Geography,5,easy,multiple
+22,Geography,10,easy,multiple
+22,Geography,20,easy,multiple
+22,Geography,5,easy,boolean
+22,Geography,10,easy,boolean
+22,Geography,5,medium,multiple
+22,Geography,10,medium,multiple
+22,Geography,20,medium,multiple
+22,Geography,5,medium,boolean
+22,Geography,10,medium,boolean
+22,Geography,20,medium,boolean
+22,Geography,5,hard,multiple
+22,Geography,10,hard,multiple
+22,Geography,20,hard,multiple
+23,History,5,easy,multiple
+23,History,10,easy,multiple
+23,History,20,easy,multiple
+23,History,5,easy,boolean
+23,History,10,easy,boolean
+23,History,5,medium,multiple
+23,History,10,medium,multiple
+23,History,20,medium,multiple
+23,History,5,medium,boolean
+23,History,10,medium,boolean
+23,History,20,medium,boolean
+23,History,5,hard,multiple
+23,History,10,hard,multiple
+23,History,20,hard,multiple
+23,History,5,hard,boolean
+24,Politics,5,easy,multiple
+24,Politics,5,easy,boolean
+24,Politics,10,easy,boolean
+24,Politics,5,medium,multiple
+24,Politics,10,medium,multiple
+24,Politics,20,medium,multiple
+24,Politics,5,medium,boolean
+24,Politics,5,hard,multiple
+24,Politics,10,hard,multiple
+25,Art,5,easy,multiple
+25,Art,10,easy,multiple
+25,Art,5,medium,multiple
+25,Art,5,hard,multiple
+26,Celebrities,5,easy,multiple
+26,Celebrities,10,easy,multiple
+26,Celebrities,5,medium,multiple
+26,Celebrities,10,medium,multiple
+26,Celebrities,20,medium,multiple
+26,Celebrities,5,hard,multiple
+27,Animals,5,easy,multiple
+27,Animals,10,easy,multiple
+27,Animals,5,easy,boolean
+27,Animals,10,easy,boolean
+27,Animals,5,medium,multiple
+27,Animals,10,medium,multiple
+27,Animals,20,medium,multiple
+27,Animals,5,medium,boolean
+27,Animals,5,hard,multiple
+27,Animals,10,hard,multiple
+28,Vehicles,5,easy,multiple
+28,Vehicles,10,easy,multiple
+28,Vehicles,5,medium,multiple
+28,Vehicles,10,medium,multiple
+28,Vehicles,20,medium,multiple
+28,Vehicles,5,medium,boolean
+28,Vehicles,5,hard,multiple
+28,Vehicles,10,hard,multiple
+29,Entertainment: Comics,5,easy,multiple
+29,Entertainment: Comics,10,easy,multiple
+29,Entertainment: Comics,5,medium,multiple
+29,Entertainment: Comics,10,medium,multiple
+29,Entertainment: Comics,20,medium,multiple
+29,Entertainment: Comics,5,hard,multiple
+29,Entertainment: Comics,10,hard,multiple
+30,Science: Gadgets,5,easy,multiple
+30,Science: Gadgets,10,easy,multiple
+30,Science: Gadgets,5,medium,multiple
+30,Science: Gadgets,5,hard,multiple
+31,Entertainment: Japanese Anime & Manga,5,easy,multiple
+31,Entertainment: Japanese Anime & Manga,10,easy,multiple
+31,Entertainment: Japanese Anime & Manga,20,easy,multiple
+31,Entertainment: Japanese Anime & Manga,5,easy,boolean
+31,Entertainment: Japanese Anime & Manga,10,easy,boolean
+31,Entertainment: Japanese Anime & Manga,5,medium,multiple
+31,Entertainment: Japanese Anime & Manga,10,medium,multiple
+31,Entertainment: Japanese Anime & Manga,20,medium,multiple
+31,Entertainment: Japanese Anime & Manga,5,medium,boolean
+31,Entertainment: Japanese Anime & Manga,5,hard,multiple
+31,Entertainment: Japanese Anime & Manga,10,hard,multiple
+31,Entertainment: Japanese Anime & Manga,20,hard,multiple
+31,Entertainment: Japanese Anime & Manga,5,hard,boolean
+32,Entertainment: Cartoon & Animations,5,easy,multiple
+32,Entertainment: Cartoon & Animations,10,easy,multiple
+32,Entertainment: Cartoon & Animations,20,easy,multiple
+32,Entertainment: Cartoon & Animations,5,medium,multiple
+32,Entertainment: Cartoon & Animations,10,medium,multiple
+32,Entertainment: Cartoon & Animations,20,medium,multiple
+32,Entertainment: Cartoon & Animations,5,medium,boolean
+32,Entertainment: Cartoon & Animations,5,hard,multiple
+32,Entertainment: Cartoon & Animations,10,hard,multiple

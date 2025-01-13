@@ -56,6 +56,11 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\AppIcon\appicon.svg" />
+	  <None Remove="Resources\Data\ValidCombinations.csv" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Resources\Data\ValidCombinations.csv" />
 	</ItemGroup>
 
 	<ItemGroup>

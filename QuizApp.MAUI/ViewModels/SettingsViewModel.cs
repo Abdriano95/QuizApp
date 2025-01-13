@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using QuizApp.Core;
+using QuizApp.MAUI.Helpers;
 using System.Collections.ObjectModel;
 using static QuizApp.Core.TriviaApiService;
 
@@ -9,99 +10,128 @@ namespace QuizApp.MAUI.ViewModels
     [ObservableObject]
     public partial class SettingsViewModel
     {
-        private readonly TriviaApiService _triviaApiService;
 
-        public SettingsViewModel(TriviaApiService triviaApiService)
+        private readonly List<ValidCombination> _validCombinations;
+
+        public SettingsViewModel()
         {
-            _triviaApiService = triviaApiService;
+            // Load valid combinations from CSV
+            _validCombinations = CsvLoader.LoadValidCombinations();
 
-            // Initialize default values
-            QuestionAmounts = new ObservableCollection<int> { 5, 10, 20 };
-            Difficulties = new ObservableCollection<string> { "easy", "medium", "hard" };
-            Types = new ObservableCollection<string> { "multiple", "boolean" };
+            // Initialize the lists based on the valid combinations
+            Categories = new ObservableCollection<string>(_validCombinations.Select(c => c.CategoryName).Distinct());
+            SelectedCategory = Categories.FirstOrDefault();
 
-            // Initialize defaults for selected values
-            SelectedAmount = QuestionAmounts.First();
-            SelectedDifficulty = Difficulties.First();
-            SelectedType = Types.First();
-
-            // Load categories on initialization
-            LoadCategoriesCommand.Execute(null);
+            QuestionAmounts = new ObservableCollection<int>();
+            Difficulties = new ObservableCollection<string>();
+            Types = new ObservableCollection<string>();
         }
 
         [ObservableProperty]
-        private ObservableCollection<Category> categories = new();
+        private ObservableCollection<string> _categories;
 
         [ObservableProperty]
-        private Category selectedCategory = new();
+        private string _selectedCategory;
 
         [ObservableProperty]
-        private ObservableCollection<int> questionAmounts = new();
+        private ObservableCollection<int> _questionAmounts;
 
         [ObservableProperty]
-        private int selectedAmount;
+        private int _selectedAmount;
 
         [ObservableProperty]
-        private ObservableCollection<string> difficulties = new();
+        private ObservableCollection<string> _difficulties;
 
         [ObservableProperty]
-        private string selectedDifficulty = string.Empty;
+        private string _selectedDifficulty;
 
         [ObservableProperty]
-        private ObservableCollection<string> types = new();
+        private ObservableCollection<string> _types;
 
         [ObservableProperty]
-        private string selectedType = string.Empty;
+        private string _selectedType;
 
-        [RelayCommand]
-        private async Task LoadCategories()
+        partial void OnSelectedCategoryChanged(string value)
         {
-            try
+            // Filtrera kombinationer baserat på vald kategori
+            var filteredCombinations = _validCombinations.Where(c => c.CategoryName == value).ToList();
+
+            if (filteredCombinations.Any())
             {
-                var categories = await _triviaApiService.GetCategoriesAsync();
-                Categories = new ObservableCollection<Category>(categories ?? new List<Category>());
+                // Uppdatera antal frågor
+                QuestionAmounts = new ObservableCollection<int>(filteredCombinations.Select(c => c.Amount).Distinct());
+                SelectedAmount = QuestionAmounts.FirstOrDefault();
+
+                // Uppdatera svårighetsgrader
+                Difficulties = new ObservableCollection<string>(filteredCombinations.Select(c => c.Difficulty).Distinct());
+                SelectedDifficulty = Difficulties.FirstOrDefault();
+
+                // Uppdatera typer
+                Types = new ObservableCollection<string>(filteredCombinations.Select(c => c.Type).Distinct());
+                SelectedType = Types.FirstOrDefault();
             }
-            catch (Exception ex)
+            else
             {
-                // Log error or show user-friendly message (e.g., "Failed to load categories.")
-                Console.WriteLine($"Error loading categories: {ex.Message}");
+                // Om inga kombinationer finns, töm alternativen
+                QuestionAmounts = new ObservableCollection<int>();
+                Difficulties = new ObservableCollection<string>();
+                Types = new ObservableCollection<string>();
+
+                SelectedAmount = 0;
+                SelectedDifficulty = string.Empty;
+                SelectedType = string.Empty;
+
+                Shell.Current.DisplayAlert("No Questions Available",
+                    $"Unfortunately, there are no available questions for the category \"{value}\".\n\n" +
+                    "Please choose a different category.",
+                    "OK");
+
+                Console.WriteLine("No valid combinations for the selected category.");
             }
         }
+
+
 
         [RelayCommand]
         private async Task StartGame()
         {
-            if (SelectedCategory == null || SelectedAmount == 0 || string.IsNullOrEmpty(SelectedDifficulty) || string.IsNullOrEmpty(SelectedType))
+            if (string.IsNullOrEmpty(SelectedCategory) || SelectedAmount == 0 || string.IsNullOrEmpty(SelectedDifficulty) || string.IsNullOrEmpty(SelectedType))
             {
-                Console.WriteLine("Please make sure all settings are selected before starting the game.");
+                await Shell.Current.DisplayAlert("Missing Settings", "Please ensure all settings are selected before starting the game.", "OK");
                 return;
             }
 
-            Console.WriteLine($"Navigating with Category ID: {SelectedCategory.Id}, Amount: {SelectedAmount}, Difficulty: {SelectedDifficulty}, Type: {SelectedType}");
-            await Shell.Current.GoToAsync($"GamePage?category={SelectedCategory.Id}&amount={SelectedAmount}&difficulty={SelectedDifficulty}&type={SelectedType}");
+            // Checks if the selected combination is valid
+            var isValidCombination = _validCombinations.Any(c =>
+                c.CategoryName == SelectedCategory &&
+                c.Amount == SelectedAmount &&
+                c.Difficulty == SelectedDifficulty &&
+                c.Type == SelectedType);
+
+            if (!isValidCombination)
+            {
+                await Shell.Current.DisplayAlert("No Questions Available",
+                    $"Unfortunately, there are no questions available for the current settings:\n\n" +
+                    $"- Category: {SelectedCategory}\n" +
+                    $"- Amount: {SelectedAmount}\n" +
+                    $"- Difficulty: {SelectedDifficulty}\n" +
+                    $"- Type: {SelectedType}\n\n" +
+                    $"Please try different settings.",
+                    "OK");
+                return;
+            }
+
+            // Get the category ID based on the selected category
+            var categoryId = _validCombinations.First(c => c.CategoryName == SelectedCategory).CategoryId;
+
+            Console.WriteLine($"Navigating with Category ID: {categoryId}, Amount: {SelectedAmount}, Difficulty: {SelectedDifficulty}, Type: {SelectedType}");
+
+            // Navigate to the game page with the selected settings
+            await Shell.Current.GoToAsync($"GamePage?category={categoryId}&amount={SelectedAmount}&difficulty={SelectedDifficulty}&type={SelectedType}");
         }
 
 
 
-        partial void OnSelectedCategoryChanged(Category value)
-        {
-            Console.WriteLine($"SelectedCategory: {value?.Name}");
-        }
-
-        partial void OnSelectedAmountChanged(int value)
-        {
-            Console.WriteLine($"SelectedAmount: {value}");
-        }
-
-        partial void OnSelectedDifficultyChanged(string value)
-        {
-            Console.WriteLine($"SelectedDifficulty: {value}");
-        }
-
-        partial void OnSelectedTypeChanged(string value)
-        {
-            Console.WriteLine($"SelectedType: {value}");
-        }
 
     }
 }

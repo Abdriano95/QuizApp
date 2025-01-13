@@ -18,64 +18,79 @@ namespace QuizApp.Core
         // Get questions from Open Trivia DB
         public async Task<List<QuestionDto>> GetQuestionsAsync(int amount = 10, string? category = null, string? difficulty = null, string? type = null, string encoding = "url3986")
         {
-            // See if we have a session sessionToken
-            if (string.IsNullOrEmpty(_sessionToken))
+            // Försöksräknare
+            int retries = 3;
+
+            while (retries > 0)
             {
-                _sessionToken = await GetSessionTokenAsync();
-            }
+                try
+                {
+                    // See if we have a session sessionToken
+                    if (string.IsNullOrEmpty(_sessionToken))
+                    {
+                        _sessionToken = await GetSessionTokenAsync();
+                    }
 
-            // Base-URL for API
-            string baseUrl = "https://opentdb.com/api.php";
+                    // Base-URL for API
+                    string baseUrl = "https://opentdb.com/api.php";
 
-            // Build query parameters
-            var queryParameters = new List<string>
+                    // Query parameters
+                    var queryParameters = new List<string>
                     {
                         $"amount={amount}",
                         $"sessionToken={_sessionToken}",
-                        $"encode={encoding}" // Default: url3986 (handles special characters)
+                        $"encode={encoding}" // Default is URL encoding
                     };
 
-            if (!string.IsNullOrEmpty(category))
-                queryParameters.Add($"category={category}");
+                    if (!string.IsNullOrEmpty(category))
+                        queryParameters.Add($"category={category}");
+                    if (!string.IsNullOrEmpty(difficulty))
+                        queryParameters.Add($"difficulty={difficulty}");
+                    if (!string.IsNullOrEmpty(type))
+                        queryParameters.Add($"type={type}");
 
-            if (!string.IsNullOrEmpty(difficulty))
-                queryParameters.Add($"difficulty={difficulty}");
+                    // Construct the full URL
+                    string url = $"{baseUrl}?{string.Join("&", queryParameters)}";
 
-            if (!string.IsNullOrEmpty(type))
-                queryParameters.Add($"type={type}");
+                    // Fetch the data
+                    var response = await _httpClient.GetStringAsync(url);
 
-            // Combine URL and query parameters
-            string url = $"{baseUrl}?{string.Join("&", queryParameters)}";
+                    // Deserialize JSON-response
+                    var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(response);
 
 
-            // Do API-call
-            var response = await _httpClient.GetStringAsync(url);
+                    //Controll response code
+                    if (apiResponse == null)
+                    {
+                        throw new Exception("Failed to parse API response.");
+                    }
 
-            // Deserialize JSON-response
-            var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(response);
+                    if (apiResponse.ResponseCode == 1) // No Results
+                    {
+                        return new List<QuestionDto>();
+                    }
+                    else if (apiResponse.ResponseCode == 4) // Token expired
+                    {
+                        _sessionToken = await GetSessionTokenAsync();
+                        continue;
+                    } else if (apiResponse.ResponseCode != 0) // Other errors
+                    {
+                        throw new Exception($"Failed to retrieve questions: Response Code {apiResponse.ResponseCode}");
+                    }
 
-            // Controll response code
-            if (apiResponse == null)
-            {
-                throw new Exception("Failed to parse API response.");
+                    return apiResponse.Results ?? new List<QuestionDto>();
+                }
+                catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+                {
+                    Console.WriteLine("Rate limit hit, waiting...");
+                    await Task.Delay(5000); // Wait 5 seconds
+                    retries--;
+                }
             }
 
-            if (apiResponse.ResponseCode == 1) // No Results
-            {
-                throw new Exception("API Error: No questions available for the selected settings.");
-            }
-            else if (apiResponse.ResponseCode == 4) // Token expired
-            {
-                _sessionToken = await GetSessionTokenAsync();
-                return await GetQuestionsAsync(amount, category, difficulty, type, encoding);
-            }
-            else if (apiResponse.ResponseCode != 0) // Other errors
-            {
-                throw new Exception($"API Error: Response Code {apiResponse.ResponseCode}");
-            }
-
-            return apiResponse.Results ?? new List<QuestionDto>();
+            throw new Exception("Too many requests, even after retries.");
         }
+
 
         // Get session sessionToken
         public async Task<string> GetSessionTokenAsync()
