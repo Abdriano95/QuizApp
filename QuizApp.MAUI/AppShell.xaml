@@ -7,18 +7,7 @@
     Shell.FlyoutBehavior="Disabled"
     Title="QuizApp.MAUI">
 
-    <ShellContent
-        Title="Settings Page"
-        ContentTemplate="{DataTemplate views:SettingsPage}"
-        Route="Settings Page" />
-
-    <ShellContent
-        Title="Results Page"
-        ContentTemplate="{DataTemplate views:ResultsPage}"
-        Route="ResultsPage" />
-
-    <ShellContent
-        Title="Game Page"
-        ContentTemplate="{DataTemplate views:GamePage}"
-        Route="GamePage" />
+    <ShellContent Route="SettingsPage" ContentTemplate="{DataTemplate views:SettingsPage}" />
+    <ShellContent Route="GamePage" ContentTemplate="{DataTemplate views:GamePage}" />
+    <ShellContent Route="ResultsPage" ContentTemplate="{DataTemplate views:ResultsPage}" />
 </Shell>

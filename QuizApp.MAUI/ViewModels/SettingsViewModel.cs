@@ -124,10 +124,13 @@ namespace QuizApp.MAUI.ViewModels
             // Get the category ID based on the selected category
             var categoryId = _validCombinations.First(c => c.CategoryName == SelectedCategory).CategoryId;
 
-            Console.WriteLine($"Navigating with Category ID: {categoryId}, Amount: {SelectedAmount}, Difficulty: {SelectedDifficulty}, Type: {SelectedType}");
+
+            string gamePageUri = $"///GamePage?category={categoryId}&amount={SelectedAmount}&difficulty={SelectedDifficulty}&type={SelectedType}";
+
 
             // Navigate to the game page with the selected settings
-            await Shell.Current.GoToAsync($"GamePage?category={categoryId}&amount={SelectedAmount}&difficulty={SelectedDifficulty}&type={SelectedType}");
+            await Shell.Current.GoToAsync(gamePageUri);
+
         }
 
 

@@ -4,7 +4,6 @@
              xmlns:vm="clr-namespace:QuizApp.MAUI.ViewModels"
              x:Class="QuizApp.MAUI.Views.GamePage"
              Title="GamePage">
-
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
             <!-- Question -->
@@ -15,26 +14,21 @@
                    Margin="10,20,10,10" />
 
             <!-- Answer Options -->
-            <CollectionView ItemsSource="{Binding CurrentQuestionAnswers}" SelectionMode="None">
+            <CollectionView ItemsSource="{Binding CurrentQuestionAnswers}"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedAnswer, Mode=TwoWay}"
+                            SelectionChangedCommand="{Binding SelectAnswerCommand}"
+                            SelectionChangedCommandParameter="{Binding SelectedAnswer}"
+                            HeightRequest="300">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame Padding="10" Margin="5" BorderColor="Gray" CornerRadius="8" BackgroundColor="White">
-                            <Frame.Triggers>
-                                <!-- Highlight the selected answer -->
-                                <DataTrigger TargetType="Frame" 
-                                             Binding="{Binding Source={RelativeSource AncestorType={x:Type vm:GameViewModel}}, Path=SelectedAnswer}" 
-                                             Value="{Binding}">
-                                    <Setter Property="BackgroundColor" Value="LightGray" />
-                                    <Setter Property="BorderColor" Value="Blue" />
-                                </DataTrigger>
-                            </Frame.Triggers>
-                            <Frame.GestureRecognizers>
-                                <TapGestureRecognizer 
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:GameViewModel}}, Path=SelectAnswerCommand}"
-                                    CommandParameter="{Binding}" />
-                            </Frame.GestureRecognizers>
-                            <Label Text="{Binding}" FontSize="18" HorizontalTextAlignment="Center" />
-                        </Frame>
+                        <Grid Padding="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Label Text="{Binding .}" FontSize="18" HorizontalTextAlignment="Center" />
+                        </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
@@ -49,15 +43,13 @@
                     TextColor="White"
                     CornerRadius="10" />
 
-            <!-- Next Question Button -->
-            <Button Text="Next Question" 
-                    Command="{Binding NextQuestionCommand}" 
-                    IsVisible="{Binding IsAnswerSubmitted}" 
-                    HorizontalOptions="Center" 
-                    WidthRequest="200" 
-                    BackgroundColor="#2196F3" 
+            <Button Text="Quit Game"
+                    Command="{Binding QuitGameCommand}"
+                    BackgroundColor="Red"
                     TextColor="White"
-                    CornerRadius="10" />
+                    CornerRadius="10"
+                    HorizontalOptions="Center"
+                    WidthRequest="200" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

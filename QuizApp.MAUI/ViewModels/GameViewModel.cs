@@ -27,7 +27,7 @@ namespace QuizApp.MAUI.ViewModels
         private ObservableCollection<string> currentQuestionAnswers = new();
 
         [ObservableProperty]
-        private string selectedAnswer = string.Empty;
+        private string selectedAnswer;
 
         [ObservableProperty]
         private bool isAnswerSelected;
@@ -141,13 +141,19 @@ namespace QuizApp.MAUI.ViewModels
 
         private void LoadCurrentQuestion()
         {
-            CurrentQuestion = Questions[CurrentQuestionIndex];
-            var answers = new List<string>(CurrentQuestion.IncorrectAnswers) { CurrentQuestion.CorrectAnswer };
-            CurrentQuestionAnswers = new ObservableCollection<string>(answers.OrderBy(_ => Guid.NewGuid()));
+            // Reset answer state
             SelectedAnswer = string.Empty;
             IsAnswerSelected = false;
             IsAnswerSubmitted = false;
+            // Load current question
+            CurrentQuestion = Questions[CurrentQuestionIndex];
+
+            // Combine correct and incorrect answers and shuffle them
+            var answers = new List<string>(CurrentQuestion.IncorrectAnswers) { CurrentQuestion.CorrectAnswer };
+            CurrentQuestionAnswers = new ObservableCollection<string>(answers.OrderBy(_ => Guid.NewGuid()));
+
         }
+
 
         [RelayCommand]
         private void SubmitAnswer()
@@ -159,7 +165,6 @@ namespace QuizApp.MAUI.ViewModels
 
             IsAnswerSubmitted = true;
 
-            Console.WriteLine("Answer submitted successfully");
 
             // Wait 1 second before moving to the next question
             Task.Delay(1000).ContinueWith(_ =>
@@ -175,7 +180,6 @@ namespace QuizApp.MAUI.ViewModels
         [RelayCommand]
         private void NextQuestion()
         {
-            Console.WriteLine("NextQuestionCommand triggered");
             if (CurrentQuestionIndex + 1 < Questions.Count)
             {
                 CurrentQuestionIndex++;
@@ -183,19 +187,48 @@ namespace QuizApp.MAUI.ViewModels
             }
             else
             {
+
+
+                string resultsPageUri = $"///ResultsPage?score={Score}&total={Questions.Count}";
                 // Navigate to ResultsPage
-                Shell.Current.GoToAsync($"ResultsPage?score={Score}&total={Questions.Count}");
+                Shell.Current.GoToAsync(resultsPageUri);
+                ResetGame();
+
             }
         }
 
         [RelayCommand]
         private void SelectAnswer(string answer)
         {
-            Console.WriteLine($"Answer selected: {answer}");
             SelectedAnswer = answer;
             IsAnswerSelected = !string.IsNullOrEmpty(answer);
         }
 
+        [RelayCommand]
+        private async Task QuitGame()
+        {
+            var result = await Shell.Current.DisplayAlert("Quit Game", "Are you sure you want to quit?", "Yes", "No");
+            if (result)
+            {
+                // Reset everything
+                ResetGame();
 
+                // Navigate to SettingsPage
+                await Shell.Current.GoToAsync("//SettingsPage");
+            }
+        }
+
+        private void ResetGame()
+        {
+            // Reset everything
+            Questions.Clear();
+            CurrentQuestion = new();
+            CurrentQuestionAnswers.Clear();
+            SelectedAnswer = string.Empty;
+            IsAnswerSelected = false;
+            IsAnswerSubmitted = false;
+            CurrentQuestionIndex = 0;
+            Score = 0;
+        }
     }
 }
