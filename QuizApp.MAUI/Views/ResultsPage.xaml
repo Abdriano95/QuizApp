@@ -39,6 +39,15 @@
                     CornerRadius="10"
                     WidthRequest="200"
                     HorizontalOptions="Center" />
+            
+            <!-- Back to Welcomepage -->
+            <Button Text="Back to Welcomepage"
+                    Command="{Binding NavigateToWelcomeCommand}"
+                    BackgroundColor="Blue"
+                    TextColor="White"
+                    CornerRadius="10"
+                    WidthRequest="200"
+                    HorizontalOptions="Center" />
 
             <!-- Quit Game Button -->
             <Button Text="Quit Game"

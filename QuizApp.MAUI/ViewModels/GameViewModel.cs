@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json;
 using QuizApp.Core;
 using QuizApp.MAUI.Models;
+using QuizApp.MAUI.Services;
 using System.Collections.ObjectModel;
 using System.Web;
 
@@ -17,6 +18,8 @@ namespace QuizApp.MAUI.ViewModels
     public partial class GameViewModel
     {
         private readonly TriviaApiService _triviaApiService;
+
+        private readonly HighScoreResultService _highScoreResultService;
 
         [ObservableProperty]
         private List<Question> questions = new();
@@ -96,9 +99,10 @@ namespace QuizApp.MAUI.ViewModels
             }
         }
 
-        public GameViewModel(TriviaApiService triviaApiService)
+        public GameViewModel(TriviaApiService triviaApiService, HighScoreResultService highScoreResultService)
         {
             _triviaApiService = triviaApiService;
+            _highScoreResultService = highScoreResultService;
         }
 
 
@@ -225,9 +229,11 @@ namespace QuizApp.MAUI.ViewModels
                 string serializedResults = Uri.EscapeDataString(JsonConvert.SerializeObject(Results));
 
                 string resultsPageUri = $"///ResultsPage?score={Score}&total={Questions.Count}&results={serializedResults}";
+                SaveResultCommand.Execute(null);
                 ResetGameState();
                 // Navigate to ResultsPage
                 Console.WriteLine($"Navigating to ResultsPage with Score={Score} and TotalQuestions={Questions.Count}, and Results");
+                // Save the result
                 Shell.Current.GoToAsync(resultsPageUri);
                 ResetGame();
 
@@ -253,6 +259,20 @@ namespace QuizApp.MAUI.ViewModels
                 // Navigate to SettingsPage
                 await Shell.Current.GoToAsync("//SettingsPage");
             }
+        }
+
+        [RelayCommand]
+        private async Task SaveResult()
+        {
+            var result = new HighScoreResult
+            {
+                PlayerName = "John",
+                Score = Score,
+                TotalQuestions = Questions.Count,
+                Date = DateTime.Now
+            };
+            await _highScoreResultService.SaveResultAsync(result);
+            await Shell.Current.DisplayAlert("Result Saved", "Your result has been saved successfully!", "OK");
         }
 
         private void ResetGame()

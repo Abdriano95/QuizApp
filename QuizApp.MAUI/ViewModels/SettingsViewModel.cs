@@ -138,6 +138,13 @@ namespace QuizApp.MAUI.ViewModels
 
         }
 
+        [RelayCommand]
+        // navigate back the the welcome page
+        private async Task GoBack()
+        {
+            await Shell.Current.GoToAsync("//WelcomePage");
+        }
+
 
 
 

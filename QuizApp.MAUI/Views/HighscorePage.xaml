@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="QuizApp.MAUI.Views.HighscorePage"
+             Title="HighscorePage">
+    <CollectionView ItemsSource="{Binding Results}">
+        <CollectionView.ItemTemplate>
+            <DataTemplate>
+                <HorizontalStackLayout Padding="10">
+                    <!--Player,Score and date-->
+                    <Label Text="Player" TextColor="Gray" FontSize="18" FontAttributes="Italic" Margin="0,0,10,0"/>
+                    <Label Text="{Binding PlayerName}" FontSize="18" FontAttributes="Bold" Margin="0,0,10,0" />
+                    <Label Text="Score" TextColor="Gray" FontSize="18" FontAttributes="Italic" Margin="0,0,10,0"/>
+                    <Label Text="{Binding Score}" FontSize="18" HorizontalOptions="EndAndExpand" Margin="0,0,10,0" />
+                    <Label Text="Date" TextColor="Gray" FontSize="18" FontAttributes="Italic" Margin="0,0,10,0"/>
+                    <Label Text="{Binding Date}" FontSize="18" HorizontalOptions="End" />
+                </HorizontalStackLayout>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+
+        <!--Back to Welcomepage button -->
+        <CollectionView.Footer>
+            <Button Text="Back to Welcomepage" Command="{Binding NavigateToWelcomeCommand}" />
+        </CollectionView.Footer>
+    </CollectionView>
+</ContentPage>

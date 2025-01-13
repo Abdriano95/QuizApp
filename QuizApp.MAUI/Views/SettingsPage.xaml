@@ -23,6 +23,8 @@
             SelectedItem="{Binding SelectedType}" />
 
             <Button Text="Start Game" Command="{Binding StartGameCommand}" />
+
+            <Button Text="Back to Welcomepage" Command="{Binding GoBackCommand}" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

@@ -97,6 +97,11 @@ namespace QuizApp.MAUI.ViewModels
 #endif
         }
 
+        [RelayCommand]
+        private async Task NavigateToWelcome()
+        {
+            await Shell.Current.GoToAsync("//WelcomePage");
+        }
 
     }
 }
