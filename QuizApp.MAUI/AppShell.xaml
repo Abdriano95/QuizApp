@@ -3,13 +3,22 @@
     x:Class="QuizApp.MAUI.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:QuizApp.MAUI"
+    xmlns:views="clr-namespace:QuizApp.MAUI.Views"
     Shell.FlyoutBehavior="Disabled"
     Title="QuizApp.MAUI">
 
     <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        Title="Settings Page"
+        ContentTemplate="{DataTemplate views:SettingsPage}"
+        Route="Settings Page" />
 
+    <ShellContent
+        Title="Results Page"
+        ContentTemplate="{DataTemplate views:ResultsPage}"
+        Route="ResultsPage" />
+
+    <ShellContent
+        Title="Game Page"
+        ContentTemplate="{DataTemplate views:GamePage}"
+        Route="GamePage" />
 </Shell>

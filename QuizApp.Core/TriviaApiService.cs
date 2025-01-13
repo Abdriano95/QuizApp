@@ -18,13 +18,13 @@ namespace QuizApp.Core
         // Get questions from Open Trivia DB
         public async Task<List<QuestionDto>> GetQuestionsAsync(int amount = 10, string? category = null, string? difficulty = null, string? type = null, string encoding = "url3986")
         {
-            // Kontrollera om session sessionToken behövs
+            // See if we have a session sessionToken
             if (string.IsNullOrEmpty(_sessionToken))
             {
                 _sessionToken = await GetSessionTokenAsync();
             }
 
-            // Bas-URL for API
+            // Base-URL for API
             string baseUrl = "https://opentdb.com/api.php";
 
             // Build query parameters
@@ -47,21 +47,27 @@ namespace QuizApp.Core
             // Combine URL and query parameters
             string url = $"{baseUrl}?{string.Join("&", queryParameters)}";
 
-            // Do API-anrop
+
+            // Do API-call
             var response = await _httpClient.GetStringAsync(url);
 
             // Deserialize JSON-response
             var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(response);
 
             // Controll response code
-            if (apiResponse?.ResponseCode == 4) // Token expired
+            if (apiResponse == null)
+            {
+                throw new Exception("Failed to parse API response.");
+            }
+
+            if (apiResponse.ResponseCode == 1) // No Results
+            {
+                throw new Exception("API Error: No questions available for the selected settings.");
+            }
+            else if (apiResponse.ResponseCode == 4) // Token expired
             {
                 _sessionToken = await GetSessionTokenAsync();
                 return await GetQuestionsAsync(amount, category, difficulty, type, encoding);
-            }
-            else if (apiResponse?.ResponseCode != 0) // Other errors
-            {
-                throw new Exception($"API Error: Response Code {apiResponse?.ResponseCode}");
             }
             else if (apiResponse.ResponseCode != 0) // Other errors
             {

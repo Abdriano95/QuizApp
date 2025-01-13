@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="QuizApp.MAUI.Views.SettingsPage"
+             Title="SettingsPage">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20">
+            <Label Text="Select Category" FontSize="20" />
+            <Picker ItemsSource="{Binding Categories}" 
+                    ItemDisplayBinding="{Binding Name}" 
+                    SelectedItem="{Binding SelectedCategory}" />
+
+            <Label Text="Select Number of Questions" FontSize="20" />
+            <Picker ItemsSource="{Binding QuestionAmounts}" 
+                    SelectedItem="{Binding SelectedAmount}" />
+
+            <Label Text="Select Difficulty" FontSize="20" />
+            <Picker ItemsSource="{Binding Difficulties}" 
+                    SelectedItem="{Binding SelectedDifficulty}" />
+
+            <Label Text="Select Question Type" FontSize="20" />
+            <Picker ItemsSource="{Binding Types}" 
+                    SelectedItem="{Binding SelectedType}" />
+
+            <Button Text="Start Game" Command="{Binding StartGameCommand}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

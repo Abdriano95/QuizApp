@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:behaviors="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="QuizApp.MAUI.Views.GamePage"
+             Title="GamePage">
+    
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="10">
+            <!-- Question -->
+            <Label Text="{Binding CurrentQuestion.QuestionText}" 
+                   FontSize="24" 
+                   HorizontalOptions="Center" />
+
+            <CollectionView ItemsSource="{Binding CurrentQuestionAnswers}" 
+                            SelectionMode="Single" 
+                            SelectedItem="{Binding SelectedAnswer}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="10" Margin="5" BorderColor="Gray" CornerRadius="5">
+                            <Label Text="{Binding}" FontSize="18" />
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Button Text="Submit Answer" 
+                    Command="{Binding SubmitAnswerCommand}" 
+                    IsEnabled="{Binding IsAnswerSelected}" />
+
+            <Button Text="Next Question" 
+                    Command="{Binding NextQuestionCommand}" 
+                    IsVisible="{Binding IsAnswerSubmitted}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
