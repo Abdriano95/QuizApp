@@ -8,6 +8,8 @@ namespace QuizApp.MAUI
         {
             InitializeComponent();
             Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
+            Routing.RegisterRoute(nameof(WelcomePage), typeof(WelcomePage));
+            Routing.RegisterRoute(nameof(HighscorePage), typeof(HighscorePage));
         }
     }
 }

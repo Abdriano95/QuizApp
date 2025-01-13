@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace QuizApp.MAUI.ViewModels
 {
     [ObservableObject]
-    public partial class HighscoreViewModel
+    public partial class HighscoreViewModel : IQueryAttributable
     {
         private readonly HighScoreResultService _highScoreResultService;
 
@@ -21,11 +21,21 @@ namespace QuizApp.MAUI.ViewModels
         public HighscoreViewModel(HighScoreResultService highScoreResultService)
         {
             _highScoreResultService = highScoreResultService;
-            _ = LoadResults();
+            LoadResults();
+        }
+
+        public async void ApplyQueryAttributes(IDictionary<string, object> query)
+        {
+            await LoadResults();
         }
         private async Task  LoadResults()
         {
+            Console.WriteLine("Loading highscores...");
             var results = await _highScoreResultService.GetResultsAsync();
+            foreach ( var result in results )
+            {
+                Console.WriteLine($"Player: {result.PlayerName}, Score: {result.Score}");
+            }
             Results = new ObservableCollection<HighScoreResult>(results);
         }
 

@@ -20,7 +20,7 @@ namespace QuizApp.MAUI.ViewModels
         [RelayCommand]
         private async Task NavigateToHighscore()
         {
-            await Shell.Current.GoToAsync("//HighscorePage");
+            await Shell.Current.GoToAsync("//HighscorePage", true);
         }
     }
 }
